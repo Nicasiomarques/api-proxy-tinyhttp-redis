@@ -11,7 +11,7 @@ const handleResponse = (response: Response) =>
 const allKeysRNil = (obj: Object) => obj ?? Object.entries(obj).every(([, value]) => !value)
 
 const buildUrl = (url: string, params?: Record<string, string>) => {
-  if (!params || allKeysRNil(params)) return url;
+  if (!params || !allKeysRNil(params)) return url;
   return `${url}?${new URLSearchParams(Object.entries(params))}`;
 };
 

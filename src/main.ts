@@ -1,20 +1,22 @@
 import { App } from "@tinyhttp/app";
 import { cors } from "@tinyhttp/cors";
 
-import { httpClient } from "./infra/httpClient";
-import { API_URL_PHOTOS, Endpoint } from "./constants";
+import { Endpoint } from "@/constants";
+import { getCacheOrSet } from "@/infra";
+import { getPhotoAlbum } from "@/useCases";
 
 const app = new App();
 app.use(cors());
 
-app.get(Endpoint.Photos, async ({ query: { albumId } }, response) => {
-  const { data } = await httpClient(API_URL_PHOTOS, { params: { albumId } });
-  return response.json(data);
+app.get(Endpoint.Photos, async (request, response) => {
+  const albumId = request.query.albumId as string;
+  const photos = await getCacheOrSet(`photos?${albumId}`, () => getPhotoAlbum({ albumId }));
+  return response.json(photos);
 });
 
-app.get(`${Endpoint.Photos}/:id`, async ({ params: { id } }, response) => {
-  const { data } = await httpClient(`${API_URL_PHOTOS}/${id}`);
-  return response.json(data);
+app.get(`${Endpoint.Photos}/:photoId`, async ({ params: { photoId } }, response) => {
+  const photos = await getCacheOrSet(`photos:${photoId}`, async () => getPhotoAlbum({ photoId }));
+  return response.json(photos);
 });
 
-export default app
+export default app;
