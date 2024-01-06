@@ -1,8 +1,8 @@
 import { App } from "@tinyhttp/app";
 import { cors } from "@tinyhttp/cors";
 
-import { httpClient } from "./httpClient";
-import { API_URL_PHOTOS, Endpoint, PORT } from "./constants";
+import { httpClient } from "./infra/httpClient";
+import { API_URL_PHOTOS, Endpoint } from "./constants";
 
 const app = new App();
 app.use(cors());
@@ -17,4 +17,4 @@ app.get(`${Endpoint.Photos}/:id`, async ({ params: { id } }, response) => {
   return response.json(data);
 });
 
-app.listen(PORT, () => console.log(`Started on http://localhost:${PORT}`));
+export default app
