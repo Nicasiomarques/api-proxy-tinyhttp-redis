@@ -21,7 +21,6 @@ export async function httpClient<T>(
 ): Promise<HttpClientResponse<T>> {
   const hasBody = options?.method !== "GET" && options?.body;
   const finalUrl = buildUrl(url, options?.params);
-  console.log(finalUrl) 
   const httpResponse = await fetch(finalUrl, {
     ...options,
     headers: {
