@@ -1,0 +1,11 @@
+{
+  "name": "proxy-api-redis",
+  "module": "main.ts",
+  "type": "module",
+  "devDependencies": {
+  },
+  "peerDependencies": {
+  },
+  "dependencies": {
+  }
+}
