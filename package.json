@@ -11,6 +11,7 @@
   "dependencies": {
     "@tinyhttp/app": "^2.2.1",
     "@tinyhttp/cors": "^2.0.0",
+    "milliparsec": "^2.3.0",
     "redis": "^4.6.12"
   }
 }
