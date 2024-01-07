@@ -8,20 +8,27 @@ export type THttpClient = <T>(
 const handleResponse = (response: Response) =>
   response.ok ? response.json() : Promise.reject(response);
 
-const allKeysRNil = (obj: Object) => obj ?? Object.entries(obj).every(([, value]) => !value)
+const isNil = (x: any) => x === null || x === undefined || x === "";
 
-const buildUrl = (url: string, params?: Record<string, string>) => {
-  if (!params || !allKeysRNil(params)) return url;
-  return `${url}?${new URLSearchParams(Object.entries(params))}`;
-};
+function objectToQueryParam(obj?: Record<string, any>): string {
+  const params = new URLSearchParams();
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const value = obj[key];
+      if (!isNil(value)) params.append(key, String(value));
+    }
+  }
+  return params.toString();
+}
 
 export async function httpClient<T>(
   url: string,
   options: extendedOptions = { method: "GET" }
 ): Promise<HttpClientResponse<T>> {
   const hasBody = options?.method !== "GET" && options?.body;
-  const finalUrl = buildUrl(url, options?.params);
-  const httpResponse = await fetch(finalUrl, {
+  const urlParams = objectToQueryParam(options?.params)
+  console.log(`${url}?${urlParams}`)
+  const httpResponse = await fetch(`${url}?${urlParams}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",

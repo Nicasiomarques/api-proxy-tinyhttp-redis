@@ -18,9 +18,8 @@ type GetAlbumPhotoOut = ReadonlyArray<PhotoProps> | PhotoProps | null;
 
 export type GetPhotoOrAlbum = (props: GetAlbumPhotoIn) => Promise<GetAlbumPhotoOut>;
 
-export const getPhotoAlbum: GetPhotoOrAlbum = async ({ albumId, photoId }) => {
-  const { data } = await httpClient<GetAlbumPhotoOut>(`${API_URL_PHOTOS}/${photoId ?? ""}`, {
-    params: { albumId },
-  });
-  return data ?? null;
+export const getPhotoOrAlbum: GetPhotoOrAlbum = async ({ albumId, photoId }) => {
+  const apiUrl = `${API_URL_PHOTOS}/${photoId || ""}`;
+  const { data } = await httpClient<GetAlbumPhotoOut>(apiUrl, { params: { albumId } });
+  return data || null;
 };
