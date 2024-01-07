@@ -1,7 +1,8 @@
 import { REDIS_URL } from "@/constants";
+import { isNullOrEmpty } from "@/helpers";
 import { createClient } from "redis";
 
-const CACHE_EXPIRATION_TIME = 3600;
+const CACHE_EXPIRATION_TIME = 200;
 
 let redisClient: any = null;
 
@@ -25,9 +26,14 @@ export const quit = () => {
 
 export const getCacheOrSet = async <T = any>(key: string, fetchFn: () => Promise<T>) => {
   const cachedValue = await redisClient.get(key);
-  if (cachedValue) return JSON.parse(cachedValue);
+  if (cachedValue) {
+    const parsedValue = JSON.parse(cachedValue);
+    if (isNullOrEmpty(parsedValue)) return fetchFn();
+    return parsedValue;
+  }
   const freshData = await fetchFn();
-  if (freshData) redisClient.setEx(key, CACHE_EXPIRATION_TIME, JSON.stringify(freshData));
-
+  if (!isNullOrEmpty(freshData)) {
+    redisClient.setEx(key, CACHE_EXPIRATION_TIME, JSON.stringify(freshData));
+  }
   return freshData;
 };
