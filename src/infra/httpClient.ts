@@ -1,3 +1,5 @@
+import { isNullOrEmpty } from "@/helpers";
+
 export type HttpClientResponse<T = any> = { data?: T; statusCode: number };
 type extendedOptions = RequestInit & { params?: Record<string, any> };
 export type THttpClient = <T>(
@@ -8,14 +10,12 @@ export type THttpClient = <T>(
 const handleResponse = (response: Response) =>
   response.ok ? response.json() : Promise.reject(response);
 
-const isNil = (x: any) => x === null || x === undefined || x === "";
-
 function objectToQueryParam(obj?: Record<string, any>): string {
   const params = new URLSearchParams();
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
       const value = obj[key];
-      if (!isNil(value)) params.append(key, String(value));
+      if (!isNullOrEmpty(value)) params.append(key, String(value));
     }
   }
   return params.toString();
@@ -27,7 +27,6 @@ export async function httpClient<T>(
 ): Promise<HttpClientResponse<T>> {
   const hasBody = options?.method !== "GET" && options?.body;
   const urlParams = objectToQueryParam(options?.params)
-  console.log(`${url}?${urlParams}`)
   const httpResponse = await fetch(`${url}?${urlParams}`, {
     ...options,
     headers: {

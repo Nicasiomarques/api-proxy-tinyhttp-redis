@@ -2,7 +2,7 @@ import { REDIS_URL } from "@/constants";
 import { isNullOrEmpty } from "@/helpers";
 import { createClient } from "redis";
 
-const CACHE_EXPIRATION_TIME = 200;
+const CACHE_EXPIRATION_TIME = 3600;
 
 let redisClient: any = null;
 
