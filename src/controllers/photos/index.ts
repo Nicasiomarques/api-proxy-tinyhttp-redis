@@ -1,4 +1,4 @@
-import { Controller, ok } from "@/adapters/tinyHttpAdapter";
+import { Controller, ok } from "@/adapters/httpPorts";
 import { getPhotoOrAlbum } from "@/useCases";
 import { getCacheOrSet } from "@/infra";
 
