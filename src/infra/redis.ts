@@ -10,7 +10,7 @@ export const initRedis = async () => {
   if (!redisClient) {
     redisClient = redisClient = await createClient({ url: REDIS_URL })
       .on("connect", () => console.log("Redis is online ✅"))
-      .on("error", console.log)
+      .on("error", error => console.log('Please check if Redis is online', error))
       .connect();
   }
   return redisClient;
