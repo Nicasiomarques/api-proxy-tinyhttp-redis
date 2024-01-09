@@ -1,6 +1,6 @@
 import { Request, Response, App } from "@tinyhttp/app";
 
-import { Controller, HttpRequest, IHttpServer, THttpMethod, TMiddleware } from "./httpPorts";
+import { Controller, HttpRequest, IHttpServer, THttpMethod, TMiddleware } from "./httpServer";
 
 export const tinyHttpAdapter = (): IHttpServer => {
   const server = new App();
@@ -15,6 +15,7 @@ export const tinyHttpAdapter = (): IHttpServer => {
   const on = async (method: THttpMethod, url: string, controller: Controller) => {
     server[method](url, async (request: Request, response: Response) => {
       const httpRequest: HttpRequest = { ...request };
+      response.setHeader('Cache-Control', 'public, max-age=180')
       const httpResponse = await controller(httpRequest);
       response.status(httpResponse.statusCode).json(httpResponse);
     });
