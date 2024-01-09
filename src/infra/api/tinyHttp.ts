@@ -1,6 +1,6 @@
 import { Request, Response, App } from "@tinyhttp/app";
 
-import { Controller, HttpRequest, IHttpServer, THttpMethod, TMiddleware } from "./httpPorts";
+import { Controller, HttpRequest, IHttpServer, THttpMethod, TMiddleware } from "./httpServer";
 
 export const tinyHttpAdapter = (): IHttpServer => {
   const server = new App();
